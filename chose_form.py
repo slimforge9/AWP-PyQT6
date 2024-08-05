@@ -19,6 +19,7 @@ class Window(QWidget):
         # Main layout
         main_layout = QVBoxLayout()
 
+
         # Logo label
         logo_label = QLabel("Apka Wsparcia Patrolowca", self)
         logo_label.setStyleSheet("background-color: blue; color: white; font-size: 54px;")
@@ -43,21 +44,23 @@ class Window(QWidget):
         upper_layout.addStretch(1)
 
         # Slider
-        slider = QSlider(Qt.Orientation.Horizontal, self)
-        slider.setFixedSize(85, 20)
-        slider.setRange(50, 100)
-        slider.setValue(85)
-        upper_layout.addWidget(slider)
+        self.slider = QSlider(Qt.Orientation.Horizontal, self)
+        self.slider.setFixedSize(85, 20)
+        self.slider.setRange(50, 100)
+        self.slider.setValue(85)
+        upper_layout.addWidget(self.slider)
 
         # Line edit
-        line_edit = QLineEdit(self)
-        line_edit.setFixedSize(50, 20)
-        line_edit.setText("0.85")
-        upper_layout.addWidget(line_edit)
+        self.line_edit = QLineEdit(self)
+        self.line_edit.setFixedSize(50, 20)
+        self.line_edit.setText("0.85")
+        upper_layout.addWidget(self.line_edit)
 
         # Connect slider and line edit
-        slider.valueChanged.connect(lambda value: line_edit.setText(f"{value / 100:.2f}"))
-        line_edit.textChanged.connect(lambda text: slider.setValue(int(float(text) * 100)))
+        self.slider.valueChanged.connect(self.change_slider)
+        self.line_edit.setEnabled(False)
+        #self.line_edit.editingFinished.connect(lambda text: self.slider.setValue(int(float(text) * 100)))
+        # lambda value: line_edit.setText(f"{value / 100:.2f}")
 
         main_layout.addLayout(upper_layout)
 
@@ -73,35 +76,63 @@ class Window(QWidget):
         # Add top vertical spacer
         form_layout.addStretch(1)
 
-        for i in range(6):
-            row_layout = QHBoxLayout()
+        # Add forms layout
+        row_layout = QHBoxLayout()
 
-            # Add space on the left
-            row_layout.addStretch(1)
+        # Add space on the left
+        row_layout.addStretch(1)
 
-            # Checkbox
-            checkbox = QCheckBox(self)
-            checkbox.setFixedSize(20, 20)
-            row_layout.addWidget(checkbox)
+        # checkbox
+        checkbox = QCheckBox("Protokół zatrzymania osoby", self)
+        row_layout.addWidget(checkbox)
 
-            # Label
-            label = QLabel(f"Label {i + 1}", self)
-            label.setFixedHeight(30)
-            row_layout.addWidget(label)
+        # # label
+        # label = QLabel("Detain", self)
+        # row_layout.addWidget(label)
 
-            # Add space between label and spinbox
-            row_layout.addStretch(1)
+        # Add space between label and spinbox
+        row_layout.addStretch(1)
 
-            # Spinbox
-            spinbox = QSpinBox(self)
-            spinbox.setFixedSize(60, 30)
-            spinbox.setValue(1)
-            row_layout.addWidget(spinbox)
+        spinbox = QSpinBox(self)
+        spinbox.setFixedSize(60, 30)
+        spinbox.setValue(1)
+        row_layout.addWidget(spinbox)
 
-            # Add space on the right
-            row_layout.addStretch(1)
+        # Add space on the right
+        row_layout.addStretch(1)
 
-            form_layout.addLayout(row_layout)
+        form_layout.addLayout(row_layout)
+
+
+        # for i in range(6):
+        #     row_layout = QHBoxLayout()
+        #
+        #     # Add space on the left
+        #     row_layout.addStretch(1)
+        #
+        #     # Checkbox
+        #     checkbox = QCheckBox(self)
+        #     checkbox.setFixedSize(20, 20)
+        #     row_layout.addWidget(checkbox)
+        #
+        #     # Label
+        #     label = QLabel(f"Label {i + 1}", self)
+        #     label.setFixedHeight(30)
+        #     row_layout.addWidget(label)
+        #
+        #     # Add space between label and spinbox
+        #     row_layout.addStretch(1)
+        #
+        #     # Spinbox
+        #     spinbox = QSpinBox(self)
+        #     spinbox.setFixedSize(60, 30)
+        #     spinbox.setValue(1)
+        #     row_layout.addWidget(spinbox)
+        #
+        #     # Add space on the right
+        #     row_layout.addStretch(1)
+        #
+        #     form_layout.addLayout(row_layout)
 
         # Add bottom vertical spacer
         form_layout.addStretch(1)
@@ -145,6 +176,11 @@ class Window(QWidget):
 
         self.setLayout(main_layout)
 
+    def change_slider(self):
+        value = self.slider.value()
+        self.line_edit.setText(str(f"{value / 100:.2f}"))
+        self.setWindowOpacity(float(value/100))
+        #lambda value: line_edit.setText(f"{value / 100:.2f}")
 
 # Run the application
 app = QApplication(sys.argv)
