@@ -76,32 +76,36 @@ class Window(QWidget):
         # Add top vertical spacer
         form_layout.addStretch(1)
 
-        # Add forms layout
-        row_layout = QHBoxLayout()
+        for _ in range(4):
+            # Add forms layout
+            row_layout = QHBoxLayout()
+            # row_layout.setObjectName("tys")
 
-        # Add space on the left
-        row_layout.addStretch(1)
+            # Add space on the left
+            row_layout.addStretch(1)
 
-        # checkbox
-        checkbox = QCheckBox("Protokół zatrzymania osoby", self)
-        row_layout.addWidget(checkbox)
+            # checkbox
+            checkbox = QCheckBox("Protokół zatrzymania osoby", self)
+            # checkbox.setObjectName("lel")
+            row_layout.addWidget(checkbox)
 
-        # # label
-        # label = QLabel("Detain", self)
-        # row_layout.addWidget(label)
+            # # label
+            # label = QLabel("Detain", self)
+            # row_layout.addWidget(label)
 
-        # Add space between label and spinbox
-        row_layout.addStretch(1)
+            # Add space between label and spinbox
+            row_layout.addStretch(1)
 
-        spinbox = QSpinBox(self)
-        spinbox.setFixedSize(60, 30)
-        spinbox.setValue(1)
-        row_layout.addWidget(spinbox)
+            spinbox = QSpinBox(self)
+            # spinbox.setObjectName("hej")
+            spinbox.setFixedSize(60, 30)
+            spinbox.setValue(1)
+            row_layout.addWidget(spinbox)
 
-        # Add space on the right
-        row_layout.addStretch(1)
+            # Add space on the right
+            row_layout.addStretch(1)
 
-        form_layout.addLayout(row_layout)
+            form_layout.addLayout(row_layout)
 
 
         # for i in range(6):
@@ -143,9 +147,11 @@ class Window(QWidget):
         # Add space on the left
         button_layout.addStretch(1)
 
+        # Buttons size
+        buttons_size = (245, 45)
         # "Powrot" button
         powrot_button = QPushButton("Powrót", self)
-        powrot_button.setFixedSize(300, 50)
+        powrot_button.setFixedSize(*buttons_size)
         powrot_button.setStyleSheet("background-color: blue; color: white;")
         button_layout.addWidget(powrot_button)
 
@@ -154,7 +160,7 @@ class Window(QWidget):
 
         # "Clear" button
         clear_button = QPushButton("Clear", self)
-        clear_button.setFixedSize(300, 50)
+        clear_button.setFixedSize(*buttons_size)
         clear_button.setStyleSheet("background-color: blue; color: white;")
         button_layout.addWidget(clear_button)
 
@@ -163,7 +169,7 @@ class Window(QWidget):
 
         # "Nastepny" button
         nastepny_button = QPushButton("Następny", self)
-        nastepny_button.setFixedSize(300, 50)
+        nastepny_button.setFixedSize(*buttons_size)
         nastepny_button.setStyleSheet("background-color: blue; color: white;")
         button_layout.addWidget(nastepny_button)
 
@@ -180,7 +186,8 @@ class Window(QWidget):
         value = self.slider.value()
         self.line_edit.setText(str(f"{value / 100:.2f}"))
         self.setWindowOpacity(float(value/100))
-        #lambda value: line_edit.setText(f"{value / 100:.2f}")
+        # lambda value: line_edit.setText(f"{value / 100:.2f}")
+
 
 # Run the application
 app = QApplication(sys.argv)
