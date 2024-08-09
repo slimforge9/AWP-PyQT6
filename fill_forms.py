@@ -1,11 +1,9 @@
 import sys
 from PyQt6.QtWidgets import (
-    QApplication, QWidget, QLabel, QPushButton, QSlider, QLineEdit, QCheckBox, QHBoxLayout, QVBoxLayout, QFrame,
-    QSpinBox, QSpacerItem, QSizePolicy
+    QApplication, QWidget, QLabel, QPushButton, QSlider, QLineEdit, QHBoxLayout, QVBoxLayout, QFrame,
+    QSpacerItem, QSizePolicy, QScrollArea
 )
-from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtCore import Qt
-from forms_database import dict_of_fields as forms_db
 
 
 class Window(QWidget):
@@ -16,16 +14,7 @@ class Window(QWidget):
         self.setGeometry(100, 100, 800, 600)
         self.setWindowOpacity(0.85)
 
-        # Holder for forms that user chosen.
-        self.chosen_forms = []
-        self.no_forms = len(forms_db.keys())
-
         self.initUI()
-
-        # setting a timer to regularly check the status of checkboxes
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.check_checkboxes)
-        self.timer.start(100)  # Sprawdzaj co 100 ms
 
     def initUI(self):
         # Main layout
@@ -87,41 +76,36 @@ class Window(QWidget):
         # Add top vertical spacer
         form_layout.addStretch(1)
 
-        # Checkboxes and other elements
-        self.checkboxes = []
-        for form_name in forms_db.keys():
-            print(form_name)
-            # Add forms layout
-            row_layout = QHBoxLayout()
+        # Scroll Area for data forms
+        scrolling_menu = QScrollArea()
 
-            # Add space on the left
-            row_layout.addStretch(1)
 
-            # checkbox
-            checkbox = QCheckBox(f"{forms_db[form_name]['description']}", self)
-            checkbox.setObjectName(f"{form_name}_chbx")
-            self.checkboxes.append(checkbox)
-            row_layout.addWidget(checkbox)
-
-            # Add space between label and spinbox
-            row_layout.addStretch(1)
-
-            # Spinbox
-            spinbox = QSpinBox(self)
-            spinbox.setFixedSize(60, 30)
-            spinbox.setValue(1)
-            row_layout.addWidget(spinbox)
-
-            # Add space on the right
-            row_layout.addStretch(1)
-
-            form_layout.addLayout(row_layout)
-
-        # Reference to saved names
-        self.detain_chbx = self.findChild(QCheckBox, "detain_form_chbx")
-        self.warrant_chbx = self.findChild(QCheckBox, "warrant_form_chbx")
-        self.identity_chbx = self.findChild(QCheckBox, "identity_form_chbx")
-
+            # for _ in range(4):
+            #     # Add forms layout
+            #     row_layout = QHBoxLayout()
+            #     # row_layout.setObjectName("tys")
+            #
+            #     # Add space on the left
+            #     row_layout.addStretch(1)
+            #
+            #     # checkbox
+            #     checkbox = QCheckBox("Protokół zatrzymania osoby", self)
+            #     # checkbox.setObjectName("lel")
+            #     row_layout.addWidget(checkbox)
+            #
+            #     # Add space between label and spinbox
+            #     row_layout.addStretch(1)
+            #
+            #     spinbox = QSpinBox(self)
+            #     # spinbox.setObjectName("hej")
+            #     spinbox.setFixedSize(60, 30)
+            #     spinbox.setValue(1)
+            #     row_layout.addWidget(spinbox)
+            #
+            #     # Add space on the right
+            #     row_layout.addStretch(1)
+            #
+            #     form_layout.addLayout(row_layout)
 
         # Add bottom vertical spacer
         form_layout.addStretch(1)
@@ -135,10 +119,9 @@ class Window(QWidget):
         # Buttons size
         buttons_size = (245, 45)
         # "Back" button
-        powrot_button = QPushButton("Menu", self)
+        powrot_button = QPushButton("Wstecz", self)
         powrot_button.setFixedSize(*buttons_size)
         powrot_button.setStyleSheet("background-color: blue; color: white;")
-        powrot_button.clicked.connect(self.menu_btn_clicked)
         button_layout.addWidget(powrot_button)
 
         # Spacer between buttons
@@ -148,7 +131,6 @@ class Window(QWidget):
         clear_button = QPushButton("Wyczyść", self)
         clear_button.setFixedSize(*buttons_size)
         clear_button.setStyleSheet("background-color: blue; color: white;")
-        clear_button.clicked.connect(self.clear_checkboxes)
         button_layout.addWidget(clear_button)
 
         # Spacer between buttons
@@ -158,7 +140,6 @@ class Window(QWidget):
         nastepny_button = QPushButton("Dalej", self)
         nastepny_button.setFixedSize(*buttons_size)
         nastepny_button.setStyleSheet("background-color: blue; color: white;")
-        nastepny_button.clicked.connect(self.next_btn_clicked)
         button_layout.addWidget(nastepny_button)
 
         # Add space on the right
@@ -174,37 +155,6 @@ class Window(QWidget):
         value = self.slider.value()
         self.line_edit.setText(str(f"{value / 100:.2f}"))
         self.setWindowOpacity(float(value/100))
-
-    def check_checkboxes(self):
-        # Sprawdź stan każdego checkboxa
-        for checkbox in self.checkboxes:
-            if checkbox.isChecked() and checkbox not in self.chosen_forms:
-                self.chosen_forms.append(checkbox)
-            elif not checkbox.isChecked() and checkbox in self.chosen_forms:
-                self.chosen_forms.remove(checkbox)
-            # Wyświetl listę zaznaczonych checkboxów
-        self.print_selected_checkboxes()
-
-    def print_selected_checkboxes(self):
-        print("Zaznaczone checkboxy:")
-        for index, checkbox in enumerate(self.checkboxes):
-            if checkbox in self.chosen_forms:
-                print(f"Checkbox {index + 1} jest zaznaczony.")
-
-    # Buttons event handling
-    def next_btn_clicked(self):
-        #self.is_running = False
-        self.timer.stop()
-
-    def menu_btn_clicked(self):
-        #self.is_running = False
-        self.timer.stop()
-
-    def clear_checkboxes(self):
-        # Odznacz wszystkie checkboxy
-        for checkbox in self.checkboxes:
-            checkbox.setChecked(False)
-        self.chosen_forms.clear()
 
 
 # Run the application
