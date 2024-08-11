@@ -6,9 +6,12 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 
 
-class Window(QWidget):
-    def __init__(self):
+class SecondWindow(QWidget):
+    def __init__(self, selected_forms):
         super().__init__()
+
+        # Get selected forms from previous menu
+        self.selected_forms = selected_forms
 
         self.setWindowTitle("AWP")
         self.setGeometry(100, 100, 800, 600)
@@ -158,7 +161,7 @@ class Window(QWidget):
 
 
 # Run the application
-app = QApplication(sys.argv)
-window = Window()
-window.show()
-sys.exit(app.exec())
+# app = QApplication(sys.argv)
+# window = SecondWindow()
+# window.show()
+# sys.exit(app.exec())

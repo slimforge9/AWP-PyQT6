@@ -1,11 +1,11 @@
 import sys
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QLabel, QPushButton, QSlider, QLineEdit, QCheckBox, QHBoxLayout, QVBoxLayout, QFrame,
-    QSpinBox, QSpacerItem, QSizePolicy
+    QSpinBox, QSpacerItem, QSizePolicy, QMessageBox
 )
-from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtCore import Qt
 from forms_database import dict_of_fields as forms_db
+from fill_forms import SecondWindow
 
 
 class Window(QWidget):
@@ -22,11 +22,6 @@ class Window(QWidget):
 
         self.initUI()
 
-        # setting a timer to regularly check the status of checkboxes
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.check_checkboxes)
-        self.timer.start(100)  # Sprawdzaj co 100 ms
-
     def initUI(self):
         # Main layout
         main_layout = QVBoxLayout()
@@ -37,6 +32,13 @@ class Window(QWidget):
         logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         logo_label.setFixedHeight(int(self.height() * 0.2))
         main_layout.addWidget(logo_label)
+
+        #signature
+        signature = QLabel("by Bartłomiej Krupiński KP II Gliwice", self)
+        signature.setStyleSheet("background-color: blue; color: yellow; font-size: 14px;")
+        signature.setAlignment(Qt.AlignmentFlag.AlignRight)
+        #signature.setFixedHeight(int(self.height() * 0.2))
+        main_layout.addWidget(signature)
 
         # Horizontal layout for profile, label, slider and line edit
         upper_layout = QHBoxLayout()
@@ -88,9 +90,9 @@ class Window(QWidget):
         form_layout.addStretch(1)
 
         # Checkboxes and other elements
-        self.checkboxes = []
+        self.form_checkboxes = {}
+        self.form_spinners = {}
         for form_name in forms_db.keys():
-            print(form_name)
             # Add forms layout
             row_layout = QHBoxLayout()
 
@@ -98,10 +100,19 @@ class Window(QWidget):
             row_layout.addStretch(1)
 
             # checkbox
-            checkbox = QCheckBox(f"{forms_db[form_name]['description']}", self)
+            checkbox = QCheckBox()
             checkbox.setObjectName(f"{form_name}_chbx")
-            self.checkboxes.append(checkbox)
+            # added
+            self.form_checkboxes[form_name] = checkbox
+
             row_layout.addWidget(checkbox)
+
+            # Label
+            form_title = QLabel(f"{forms_db[form_name]['description']}", self)
+            form_title.setObjectName(f"{form_name}_title")
+            form_title.setFixedHeight(30)
+            row_layout.addWidget(form_title)
+
 
             # Add space between label and spinbox
             row_layout.addStretch(1)
@@ -110,6 +121,9 @@ class Window(QWidget):
             spinbox = QSpinBox(self)
             spinbox.setFixedSize(60, 30)
             spinbox.setValue(1)
+            spinbox.setRange(1, 10)
+            # added
+            self.form_spinners[form_name] = spinbox
             row_layout.addWidget(spinbox)
 
             # Add space on the right
@@ -158,7 +172,7 @@ class Window(QWidget):
         nastepny_button = QPushButton("Dalej", self)
         nastepny_button.setFixedSize(*buttons_size)
         nastepny_button.setStyleSheet("background-color: blue; color: white;")
-        nastepny_button.clicked.connect(self.next_btn_clicked)
+        nastepny_button.clicked.connect(self.openNextWindow)
         button_layout.addWidget(nastepny_button)
 
         # Add space on the right
@@ -175,26 +189,25 @@ class Window(QWidget):
         self.line_edit.setText(str(f"{value / 100:.2f}"))
         self.setWindowOpacity(float(value/100))
 
-    def check_checkboxes(self):
-        # Sprawdź stan każdego checkboxa
-        for checkbox in self.checkboxes:
-            if checkbox.isChecked() and checkbox not in self.chosen_forms:
-                self.chosen_forms.append(checkbox)
-            elif not checkbox.isChecked() and checkbox in self.chosen_forms:
-                self.chosen_forms.remove(checkbox)
-            # Wyświetl listę zaznaczonych checkboxów
-        self.print_selected_checkboxes()
 
-    def print_selected_checkboxes(self):
-        print("Zaznaczone checkboxy:")
-        for index, checkbox in enumerate(self.checkboxes):
-            if checkbox in self.chosen_forms:
-                print(f"Checkbox {index + 1} jest zaznaczony.")
+    def openNextWindow(self):
+        # This func is game changer and this line under
+        selected_forms = {form: spinner.value() for form, checkbox, spinner in
+                          zip(self.form_checkboxes.keys(), self.form_checkboxes.values(), self.form_spinners.values())
+                          if checkbox.isChecked() and spinner.value() > 0}
 
-    # Buttons event handling
-    def next_btn_clicked(self):
-        #self.is_running = False
-        self.timer.stop()
+        if not selected_forms:
+            QMessageBox.warning(self, "Brak wybranych formularzy",
+                                "Proszę wybrać przynajmniej jeden dokument\n"
+                                " oraz określić ilość kopii")
+            return
+        else:
+            print(selected_forms)
+
+
+        self.next_window = SecondWindow(selected_forms)
+        self.next_window.show()
+        self.close()
 
     def menu_btn_clicked(self):
         #self.is_running = False
