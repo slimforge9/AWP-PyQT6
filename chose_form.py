@@ -113,7 +113,6 @@ class Window(QWidget):
             form_title.setFixedHeight(30)
             row_layout.addWidget(form_title)
 
-
             # Add space between label and spinbox
             row_layout.addStretch(1)
 
@@ -132,9 +131,9 @@ class Window(QWidget):
             form_layout.addLayout(row_layout)
 
         # Reference to saved names
-        self.detain_chbx = self.findChild(QCheckBox, "detain_form_chbx")
-        self.warrant_chbx = self.findChild(QCheckBox, "warrant_form_chbx")
-        self.identity_chbx = self.findChild(QCheckBox, "identity_form_chbx")
+        # self.detain_chbx = self.findChild(QCheckBox, "detain_form_chbx")
+        # self.warrant_chbx = self.findChild(QCheckBox, "warrant_form_chbx")
+        # self.identity_chbx = self.findChild(QCheckBox, "identity_form_chbx")
 
 
         # Add bottom vertical spacer
@@ -210,8 +209,7 @@ class Window(QWidget):
         self.close()
 
     def menu_btn_clicked(self):
-        #self.is_running = False
-        self.timer.stop()
+        pass
 
     def clear_checkboxes(self):
         # Odznacz wszystkie checkboxy
