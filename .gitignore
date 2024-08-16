@@ -1,1 +1,5 @@
 .idea/workspace.xml
+.gitignore.bak
+__pycache__/
+gpt.py
+source-copies/
