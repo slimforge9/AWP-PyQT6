@@ -1,5 +1,10 @@
 .idea/workspace.xml
 .gitignore.bak
 __pycache__/
+<<<<<<< HEAD
 gpt.py
 source-copies/
+=======
+source-copies
+gpt.py
+>>>>>>> chose_forms
