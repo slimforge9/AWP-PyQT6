@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import ( QMainWindow,
 from PyQt6.QtCore import Qt
 from forms_database import dict_of_fields as forms_db
 from chose_form import ChoseForms
+from fill_forms import FillForms
 
 
 class Window(QWidget):
@@ -30,11 +31,10 @@ class Window(QWidget):
         logo_label.setFixedHeight(int(self.height() * 0.2))
         main_layout.addWidget(logo_label)
 
-        #signature
+        # signature
         signature = QLabel("by Bartłomiej Krupiński KP II Gliwice", self)
         signature.setStyleSheet("background-color: blue; color: yellow; font-size: 14px;")
         signature.setAlignment(Qt.AlignmentFlag.AlignRight)
-        #signature.setFixedHeight(int(self.height() * 0.2))
         main_layout.addWidget(signature)
 
         # Horizontal layout for profile, label, slider and line edit
@@ -84,17 +84,17 @@ class Window(QWidget):
         form_layout = QVBoxLayout()
 
         # Add top vertical spacer
-        form_layout.addStretch(1)
+        #form_layout.addStretch(1)
 
-        # PLACE FOR QStackedWindow
+        # Menu management
         self.stack = QStackedWidget()
-        # self.chose_forms_menu = ChoseForms()
         self.stack.addWidget(self.chose_forms_menu)
         self.stack.setCurrentIndex(0)
         form_layout.addWidget(self.stack)
 
+
         # Add bottom vertical spacer
-        form_layout.addStretch(1)
+        #form_layout.addStretch(1)
 
         # Layout for the buttons at the bottom
         button_layout = QHBoxLayout()
@@ -105,21 +105,21 @@ class Window(QWidget):
         # Buttons size
         buttons_size = (245, 45)
         # "Back" button
-        powrot_button = QPushButton("Menu", self)
-        powrot_button.setFixedSize(*buttons_size)
-        powrot_button.setStyleSheet("background-color: blue; color: white;")
-        powrot_button.clicked.connect(self.menu_btn_clicked)
-        button_layout.addWidget(powrot_button)
+        self.back_button = QPushButton("Menu", self)
+        self.back_button.setFixedSize(*buttons_size)
+        self.back_button.setStyleSheet("background-color: blue; color: white;")
+        self.back_button.clicked.connect(self.menu_btn_clicked)
+        button_layout.addWidget(self.back_button)
 
         # Spacer between buttons
         button_layout.addSpacerItem(QSpacerItem(25, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum))
 
         # "Clear" button
-        clear_button = QPushButton("Wyczyść", self)
-        clear_button.setFixedSize(*buttons_size)
-        clear_button.setStyleSheet("background-color: blue; color: white;")
-        clear_button.clicked.connect(self.clear_checkboxes)
-        button_layout.addWidget(clear_button)
+        self.clear_button = QPushButton("Wyczyść", self)
+        self.clear_button.setFixedSize(*buttons_size)
+        self.clear_button.setStyleSheet("background-color: blue; color: white;")
+        self.clear_button.clicked.connect(self.clear_checkboxes)
+        button_layout.addWidget(self.clear_button)
 
         # Spacer between buttons
         button_layout.addSpacerItem(QSpacerItem(25, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum))
@@ -128,7 +128,7 @@ class Window(QWidget):
         self.nastepny_button = QPushButton("Dalej", self)
         self.nastepny_button.setFixedSize(*buttons_size)
         self.nastepny_button.setStyleSheet("background-color: blue; color: white;")
-        self.nastepny_button.clicked.connect(self.openNextWindow)
+        self.nastepny_button.clicked.connect(self.openFillFormMenu)
         button_layout.addWidget(self.nastepny_button)
 
         # Add space on the right
@@ -140,10 +140,21 @@ class Window(QWidget):
 
         self.setLayout(main_layout)
 
-    def openNextWindow(self):
-        cos = self.chose_forms_menu.get_forms_list()
-        #self.nastepny_button.clicked.disconnect()
-        print(cos)
+    def openFillFormMenu(self):
+        # Get forms list(dict)
+        chosen_forms = self.chose_forms_menu.get_forms_list()
+        print(chosen_forms)
+
+        # Set next menu
+        self.fill_forms_menu = FillForms(chosen_forms)
+        self.stack.addWidget(self.fill_forms_menu)
+        self.stack.setCurrentIndex(1)
+        self.back_button.setText("Powrót")
+
+        # Stash
+        # self.nastepny_button.clicked.disconnect()
+        # self.nastepny_button.clicked.connect(WYKONAJ_PLIKI)
+        print(self.stack.currentIndex())
 
     def change_slider(self):
         value = self.slider.value()

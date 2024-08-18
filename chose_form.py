@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import (
 from forms_database import dict_of_fields as forms_db
 # import sys
 
+
 class ChoseForms(QWidget):
     def __init__(self):
         super().__init__()
@@ -54,13 +55,11 @@ class ChoseForms(QWidget):
 
         self.setLayout(self.chose_frm_layout)
 
-        #print(self.form_spinners)
-        #print(self.form_checkboxes)
-
         # Reference to saved names
-        #self.detain_chbx = self.findChild(QCheckBox, "detain_form_chbx")
+        # self.detain_chbx = self.findChild(QCheckBox, "detain_form_chbx")
         # self.warrant_chbx = self.findChild(QCheckBox, "warrant_form_chbx")
         # self.identity_chbx = self.findChild(QCheckBox, "identity_form_chbx")
+
     def get_forms_list(self):
         # This func is game changer and this line under
         selected_forms = {form: spinner.value() for form, checkbox, spinner in
