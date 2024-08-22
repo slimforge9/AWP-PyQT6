@@ -1,9 +1,8 @@
-import sys
-from PyQt6.QtWidgets import ( QListWidget,QTextEdit,
+from PyQt6.QtWidgets import (QListWidget,QTextEdit,
     QApplication, QWidget, QLabel, QPushButton, QSlider, QLineEdit, QHBoxLayout, QVBoxLayout, QFrame,
     QSpacerItem, QSizePolicy, QScrollArea
 )
-from PyQt6.QtCore import Qt
+from forms_database import dict_of_fields as forms_db
 
 
 class FillForms(QWidget):
@@ -13,40 +12,54 @@ class FillForms(QWidget):
 
         self.initUI()
 
-# Trzeba najpierw zrobic scrollView
-# Dodac QFrame dla kazdego formularza, kolor ramki
-# zrobic petle ktora przy tworzeniu QFrame dla formularza
-# stworzy QLabel i QTextEdit dla kazdego itema w formularzu
-# pobrane z forms_database
-# scroll viev musi miec
     def initUI(self):
-        # stash
-        self.item = ["Python", "Python 2.7", "Python 2.9", "Python 3.5", "Python 3.7", "National", "Zebra",
-                "Apple", "X Ray", "Boat", "Tiger", "Item001", "Item002", "Item003", "Item004", "Item005",
-                "001Item", "002Item", "003Item", "004Item", "005Item", "Ball", "Cat", "Dog", "Fish",
-                "Gold Fish", "Star Fish"]
 
-        # Main layout
-        main_layout = QVBoxLayout()
-        scroll_area = QScrollArea()
-        inside_layout = QHBoxLayout()
-        inside_widget = QWidget()
+        # Tworzenie głównego układu dla okna
+        main_layout = QVBoxLayout(self)
 
+        # Tworzenie scroll area
+        scroll_area = QScrollArea(self)
         scroll_area.setWidgetResizable(True)
 
-        for item, copies in self.items.items():
-            label = QLabel(item)
-            text_edit = QTextEdit("chędożyć")
-            inside_layout.addWidget(label)
-            inside_layout.addWidget(text_edit)
+        # Tworzenie widgetu w scroll area
+        scroll_widget = QWidget()
+        scroll_layout = QVBoxLayout(scroll_widget)
 
-        inside_widget.setLayout(inside_layout)
+        # Create one QFrame for one chosen form
+        for form in self.items.keys():
 
-        scroll_area.setWidget(inside_widget)
+            # Create QFrame to separate each form
+            frame_for_each_form = QFrame()
+            frame_for_each_form.setFrameShape(QFrame.Shape.Box)
+            frame_for_each_form.setStyleSheet("QFrame {border: 2px solid blue;}")
+            frame_layout = QVBoxLayout(frame_for_each_form)
 
+            # Form title
+            title_label = QLabel(f'{forms_db[form]["description"]}')
+            frame_layout.addWidget(title_label)
+
+            # Add labels for scroll example
+            for _ in range(10):
+                # Create vertical layout for widgets
+                one_line_field_layout = QHBoxLayout()
+
+                # Create widgets
+                label = QLabel("testowy label")
+                label.setStyleSheet("border: 1px none;")
+                line_edit = QLineEdit()
+
+                # Add widgets to horizontal layout
+                one_line_field_layout.addWidget(label)
+                one_line_field_layout.addWidget(line_edit)
+
+                # Add horizontal layout to frame layout
+                frame_layout.addLayout(one_line_field_layout)
+
+            # Add frames to scroll layout
+            scroll_layout.addWidget(frame_for_each_form)
+
+        # Add scroll wdiget to scroll area
+        scroll_area.setWidget(scroll_widget)
+
+        # Add scroll area to main layout
         main_layout.addWidget(scroll_area)
-        self.setLayout(main_layout)
-
-
-
-        # scroll_area.setWidget()

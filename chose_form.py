@@ -23,19 +23,13 @@ class ChoseForms(QWidget):
             # Add space on the left
             self.row_layout.addStretch(1)
 
-            # checkbox
-            checkbox = QCheckBox()
+            # Checkbox
+            checkbox = QCheckBox(f"{forms_db[form_name]['description']}")
             checkbox.setObjectName(f"{form_name}_chbx")
-            # added
-            self.form_checkboxes[form_name] = checkbox
-
             self.row_layout.addWidget(checkbox)
 
-            # Label
-            self.form_title = QLabel(f"{forms_db[form_name]['description']}", self)
-            #self.form_title.setObjectName(f"{form_name}_title")
-            self.form_title.setFixedHeight(30)
-            self.row_layout.addWidget(self.form_title)
+            # Add checkbox references
+            self.form_checkboxes[form_name] = checkbox
 
             # Add space between label and spinbox
             self.row_layout.addStretch(1)

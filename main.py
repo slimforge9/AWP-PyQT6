@@ -18,6 +18,9 @@ class Window(QWidget):
         self.setWindowOpacity(0.85)
         self.chose_forms_menu = ChoseForms()
 
+        # Buttons size
+        self.BUTTONS_SIZE = (245, 45)
+
         self.initUI()
 
     def initUI(self):
@@ -41,7 +44,7 @@ class Window(QWidget):
         upper_layout = QHBoxLayout()
 
         # Profile button
-        profile_button = QPushButton("Profile", self)
+        profile_button = QPushButton("Profil", self)
         profile_button.setFixedSize(100, 30)
         upper_layout.addWidget(profile_button)
 
@@ -84,7 +87,7 @@ class Window(QWidget):
         form_layout = QVBoxLayout()
 
         # Add top vertical spacer
-        #form_layout.addStretch(1)
+        form_layout.addStretch(1)
 
         # Menu management
         self.stack = QStackedWidget()
@@ -92,9 +95,8 @@ class Window(QWidget):
         self.stack.setCurrentIndex(0)
         form_layout.addWidget(self.stack)
 
-
         # Add bottom vertical spacer
-        #form_layout.addStretch(1)
+        form_layout.addStretch(1)
 
         # Layout for the buttons at the bottom
         button_layout = QHBoxLayout()
@@ -102,11 +104,9 @@ class Window(QWidget):
         # Add space on the left
         button_layout.addStretch(1)
 
-        # Buttons size
-        buttons_size = (245, 45)
         # "Back" button
         self.back_button = QPushButton("Menu", self)
-        self.back_button.setFixedSize(*buttons_size)
+        self.back_button.setFixedSize(*self.BUTTONS_SIZE)
         self.back_button.setStyleSheet("background-color: blue; color: white;")
         self.back_button.clicked.connect(self.menu_btn_clicked)
         button_layout.addWidget(self.back_button)
@@ -116,7 +116,7 @@ class Window(QWidget):
 
         # "Clear" button
         self.clear_button = QPushButton("Wyczyść", self)
-        self.clear_button.setFixedSize(*buttons_size)
+        self.clear_button.setFixedSize(*self.BUTTONS_SIZE)
         self.clear_button.setStyleSheet("background-color: blue; color: white;")
         self.clear_button.clicked.connect(self.clear_checkboxes)
         button_layout.addWidget(self.clear_button)
@@ -126,7 +126,7 @@ class Window(QWidget):
 
         # "Next" button
         self.nastepny_button = QPushButton("Dalej", self)
-        self.nastepny_button.setFixedSize(*buttons_size)
+        self.nastepny_button.setFixedSize(*self.BUTTONS_SIZE)
         self.nastepny_button.setStyleSheet("background-color: blue; color: white;")
         self.nastepny_button.clicked.connect(self.openFillFormMenu)
         button_layout.addWidget(self.nastepny_button)
