@@ -1,10 +1,9 @@
 import sys
-from PyQt6.QtWidgets import ( QMainWindow,
+from PyQt6.QtWidgets import (
     QApplication, QWidget, QLabel, QPushButton, QSlider, QLineEdit, QHBoxLayout, QVBoxLayout, QFrame,
     QSpacerItem, QSizePolicy, QStackedWidget
 )
 from PyQt6.QtCore import Qt
-from forms_database import dict_of_fields as forms_db
 from chose_form import ChoseForms
 from fill_forms import FillForms
 
@@ -154,7 +153,7 @@ class Window(QWidget):
         # Stash
         # self.nastepny_button.clicked.disconnect()
         # self.nastepny_button.clicked.connect(WYKONAJ_PLIKI)
-        print(self.stack.currentIndex())
+        # print(self.stack.currentIndex())
 
     def change_slider(self):
         value = self.slider.value()

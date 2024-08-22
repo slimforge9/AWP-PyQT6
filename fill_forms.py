@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import (QListWidget,QTextEdit,
     QSpacerItem, QSizePolicy, QScrollArea
 )
 from forms_database import dict_of_fields as forms_db
+import flattened_list
 
 
 class FillForms(QWidget):
@@ -10,6 +11,8 @@ class FillForms(QWidget):
         super().__init__()
         self.items = items
 
+        # Get required list of fields for each form
+        self.list_of_fields = flattened_list.get_list(self.items)
         self.initUI()
 
     def initUI(self):
@@ -34,7 +37,7 @@ class FillForms(QWidget):
             frame_for_each_form.setStyleSheet("QFrame {border: 2px solid blue;}")
             frame_layout = QVBoxLayout(frame_for_each_form)
 
-            # Form title
+            # Create first label as a form title
             title_label = QLabel(f'{forms_db[form]["description"]}')
             frame_layout.addWidget(title_label)
 
@@ -48,9 +51,15 @@ class FillForms(QWidget):
                 label.setStyleSheet("border: 1px none;")
                 line_edit = QLineEdit()
 
+                label2 = QLabel("testowy label")
+                label2.setStyleSheet("border: 1px none;")
+                line_edit2 = QLineEdit()
+
                 # Add widgets to horizontal layout
                 one_line_field_layout.addWidget(label)
                 one_line_field_layout.addWidget(line_edit)
+                one_line_field_layout.addWidget(label2)
+                one_line_field_layout.addWidget(line_edit2)
 
                 # Add horizontal layout to frame layout
                 frame_layout.addLayout(one_line_field_layout)
