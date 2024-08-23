@@ -29,7 +29,7 @@ dict_of_fields = {
             'name': {'type': 'cell', 'coords': {10, 20}},
             'surname': {'type': 'cell', 'coords': {10, 20}},
             'p_no': {'type': 'cell', 'coords': {10, 20}},
-            'stop_date': {'type': 'cell', 'coords': {10,20}}
+            'stop_date': {'type': 'cell', 'coords': {10, 20}}
         },
         'page2': {
             'name': {'type': 'cell', 'coords': {10, 20}},

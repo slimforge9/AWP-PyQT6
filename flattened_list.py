@@ -1,4 +1,4 @@
-from forms_database import dict_of_fields as db
+from forms_database import dict_of_fields as database
 
 
 def get_list(chosen_forms):
@@ -8,14 +8,14 @@ def get_list(chosen_forms):
 
     # Get fields
     for chosen_form in chosen_forms.keys():
-        for page in db[chosen_form]:
+        for page in database[chosen_form]:
             if page == 'description':
                 continue
             else:
-                for field in db[chosen_form][page].keys():
+                for field in database[chosen_form][page].keys():
                     flattened_list.append(field)
 
-    # Create dict for ordered distinct fields list
+    # Create dict with ordered distinct fields list
     flat_fields = dict.fromkeys(flattened_list)
 
     # Return flattened list
