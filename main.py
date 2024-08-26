@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-print("Hello world")
-print("git test")
-=======
 import sys
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QLabel, QPushButton, QSlider, QLineEdit, QHBoxLayout, QVBoxLayout, QFrame,
@@ -30,6 +26,8 @@ class Window(QWidget):
         # Buttons size
         self.BUTTONS_SIZE = (245, 45)
 
+        # Init data
+        self.profile_window = ProfileWindow(self)
         self.initUI()
 
     def initUI(self):
@@ -161,7 +159,6 @@ class Window(QWidget):
 
     def open_profile_window(self):
         """Opens manage profile window"""
-        self.profile_window = ProfileWindow(self)
         self.profile_window.exec()
 
     def change_slider(self):
@@ -182,4 +179,3 @@ app = QApplication(sys.argv)
 window = Window()
 window.show()
 sys.exit(app.exec())
->>>>>>> change_pages

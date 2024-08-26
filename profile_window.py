@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (
     QDialog, QVBoxLayout, QPushButton, QComboBox, QLabel, QTextEdit, QMessageBox, QFileDialog
 )
-from secondwindow import ProfileEditor
+from profile_editor import ProfileEditor
 import os
 
 
@@ -45,6 +45,9 @@ class ProfileWindow(QDialog):
         self.delete_button.clicked.connect(self.delete_profile)
         layout.addWidget(self.delete_button)
 
+    def get_loaded_profiles(self):
+        return self.profiles
+
     def load_profiles(self):
         """Wczytuje profile z pliku"""
         if os.path.exists('profiles.txt'):
@@ -57,6 +60,7 @@ class ProfileWindow(QDialog):
                         'jednostka': unit,
                         'miejscowosc': location
                     }
+        print(self.profiles)
 
     def save_profiles(self):
         """Zapisuje profile do pliku"""
