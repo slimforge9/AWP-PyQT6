@@ -6,14 +6,20 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from chose_form import ChoseForms
 from fill_forms import FillForms
+from profile_window import ProfileWindow
 
 
 class Window(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.POS_X = 100
+        self.POS_Y = 100
+        self.WIDTH = 800
+        self.HEIGHT = 600
+
         self.setWindowTitle("AWP")
-        self.setGeometry(100, 100, 800, 600)
+        self.setGeometry(self.POS_X, self.POS_Y, self.WIDTH, self.HEIGHT)
         self.setWindowOpacity(0.85)
         self.chose_forms_menu = ChoseForms()
 
@@ -45,6 +51,7 @@ class Window(QWidget):
         # Profile button
         profile_button = QPushButton("Profil", self)
         profile_button.setFixedSize(100, 30)
+        profile_button.clicked.connect(self.open_profile_window)
         upper_layout.addWidget(profile_button)
 
         # Name label
@@ -134,9 +141,7 @@ class Window(QWidget):
         button_layout.addStretch(1)
 
         form_layout.addLayout(button_layout)
-
         main_layout.addLayout(form_layout)
-
         self.setLayout(main_layout)
 
     def openFillFormMenu(self):
@@ -150,10 +155,10 @@ class Window(QWidget):
         self.stack.setCurrentIndex(1)
         self.back_button.setText("Powrót")
 
-        # Stash
-        # self.nastepny_button.clicked.disconnect()
-        # self.nastepny_button.clicked.connect(WYKONAJ_PLIKI)
-        # print(self.stack.currentIndex())
+    def open_profile_window(self):
+        """Opens manage profile window"""
+        self.profile_window = ProfileWindow(self)
+        self.profile_window.exec()
 
     def change_slider(self):
         value = self.slider.value()
@@ -165,9 +170,7 @@ class Window(QWidget):
 
     def clear_checkboxes(self):
         # Odznacz wszystkie checkboxy
-        for checkbox in self.checkboxes:
-            checkbox.setChecked(False)
-        self.chosen_forms.clear()
+        print(self.chose_forms_menu.clear_checkboxes())
 
 
 # Run the application

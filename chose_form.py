@@ -16,7 +16,7 @@ class ChoseForms(QWidget):
 
         self.chose_frm_layout = QVBoxLayout()
 
-        for form_name in forms_db.keys():
+        for chbx_object in forms_db.keys():
             # Add forms layout
             self.row_layout = QHBoxLayout()
 
@@ -24,12 +24,12 @@ class ChoseForms(QWidget):
             self.row_layout.addStretch(1)
 
             # Checkbox
-            checkbox = QCheckBox(f"{forms_db[form_name]['description']}")
-            checkbox.setObjectName(f"{form_name}_chbx")
+            checkbox = QCheckBox(f"{forms_db[chbx_object]['description']}")
+            checkbox.setObjectName(f"{chbx_object}_chbx")
             self.row_layout.addWidget(checkbox)
 
             # Add checkbox references
-            self.form_checkboxes[form_name] = checkbox
+            self.form_checkboxes[chbx_object] = checkbox
 
             # Add space between label and spinbox
             self.row_layout.addStretch(1)
@@ -39,8 +39,12 @@ class ChoseForms(QWidget):
             spinbox.setFixedSize(60, 30)
             spinbox.setValue(1)
             spinbox.setRange(1, 10)
+
+            if chbx_object == 'detain_form':
+                spinbox.setValue(3)
+
             # added
-            self.form_spinners[form_name] = spinbox
+            self.form_spinners[chbx_object] = spinbox
             self.row_layout.addWidget(spinbox)
 
             # Add space on the right
@@ -68,8 +72,7 @@ class ChoseForms(QWidget):
         else:
             return selected_forms
 
-# # Run the application
-# app = QApplication(sys.argv)
-# window = ChoseForms()
-# window.show()
-# sys.exit(app.exec())
+    def clear_checkboxes(self):
+        for chbx_object in self.form_checkboxes.values():
+            chbx_object.setChecked(False)
+
