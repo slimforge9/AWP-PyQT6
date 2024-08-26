@@ -7,4 +7,11 @@ source-copies/
 =======
 source-copies
 gpt.py
+<<<<<<< HEAD
 >>>>>>> chose_forms
+=======
+main2.py
+first_window.py
+secondwindow.py
+profiles.txt
+>>>>>>> change_pages

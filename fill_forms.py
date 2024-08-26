@@ -1,167 +1,74 @@
-import sys
-from PyQt6.QtWidgets import (
+from PyQt6.QtWidgets import (QListWidget,QTextEdit,
     QApplication, QWidget, QLabel, QPushButton, QSlider, QLineEdit, QHBoxLayout, QVBoxLayout, QFrame,
     QSpacerItem, QSizePolicy, QScrollArea
 )
-from PyQt6.QtCore import Qt
+from forms_database import dict_of_fields as forms_db
+import flattened_list
 
 
-class SecondWindow(QWidget):
-    def __init__(self, selected_forms):
+class FillForms(QWidget):
+    def __init__(self, items):
         super().__init__()
+        self.items = items
 
-        # Get selected forms from previous menu
-        self.selected_forms = selected_forms
-
-        self.setWindowTitle("AWP")
-        self.setGeometry(100, 100, 800, 600)
-        self.setWindowOpacity(0.85)
-
+        # Get required list of fields for each form
+        self.list_of_fields = flattened_list.get_list(self.items)
         self.initUI()
 
     def initUI(self):
-        # Main layout
-        main_layout = QVBoxLayout()
 
-        # Logo label
-        logo_label = QLabel("Apka Wsparcia Patrolowca", self)
-        logo_label.setStyleSheet("background-color: blue; color: white; font-size: 54px;")
-        logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        logo_label.setFixedHeight(int(self.height() * 0.2))
-        main_layout.addWidget(logo_label)
+        # Tworzenie głównego układu dla okna
+        main_layout = QVBoxLayout(self)
 
-        # Horizontal layout for profile, label, slider and line edit
-        upper_layout = QHBoxLayout()
+        # Tworzenie scroll area
+        scroll_area = QScrollArea(self)
+        scroll_area.setWidgetResizable(True)
 
-        # Profile button
-        profile_button = QPushButton("Profile", self)
-        profile_button.setFixedSize(100, 30)
-        upper_layout.addWidget(profile_button)
+        # Tworzenie widgetu w scroll area
+        scroll_widget = QWidget()
+        scroll_layout = QVBoxLayout(scroll_widget)
 
-        # Name label
-        name_label = QLabel("sierż. szt. Chujnicki Arystoteles, ID: 684561", self)
-        name_label.setFixedHeight(30)
-        upper_layout.addWidget(name_label)
+        # Create one QFrame for one chosen form
+        for form in self.items.keys():
 
-        # Add space
-        upper_layout.addStretch(1)
+            # Create QFrame to separate each form
+            frame_for_each_form = QFrame()
+            frame_for_each_form.setFrameShape(QFrame.Shape.Box)
+            frame_for_each_form.setStyleSheet("QFrame {border: 2px solid blue;}")
+            frame_layout = QVBoxLayout(frame_for_each_form)
 
-        # Slider
-        self.slider = QSlider(Qt.Orientation.Horizontal, self)
-        self.slider.setFixedSize(85, 20)
-        self.slider.setRange(50, 100)
-        self.slider.setValue(85)
-        upper_layout.addWidget(self.slider)
+            # Create first label as a form title
+            title_label = QLabel(f'{forms_db[form]["description"]}')
+            frame_layout.addWidget(title_label)
 
-        # Line edit
-        self.line_edit = QLineEdit(self)
-        self.line_edit.setFixedSize(50, 20)
-        self.line_edit.setText("0.85")
-        upper_layout.addWidget(self.line_edit)
+            # Add labels for scroll example
+            for _ in range(10):
+                # Create vertical layout for widgets
+                one_line_field_layout = QHBoxLayout()
 
-        # Connect slider and line edit
-        self.slider.valueChanged.connect(self.change_slider)
-        self.line_edit.setEnabled(False)
-        # self.line_edit.editingFinished.connect(lambda text: self.slider.setValue(int(float(text) * 100)))
-        # lambda value: line_edit.setText(f"{value / 100:.2f}")
+                # Create widgets
+                label = QLabel("testowy label")
+                label.setStyleSheet("border: 1px none;")
+                line_edit = QLineEdit()
 
-        main_layout.addLayout(upper_layout)
+                label2 = QLabel("testowy label")
+                label2.setStyleSheet("border: 1px none;")
+                line_edit2 = QLineEdit()
 
-        # Separator line
-        separator = QFrame(self)
-        separator.setFrameShape(QFrame.Shape.HLine)
-        separator.setFrameShadow(QFrame.Shadow.Sunken)
-        main_layout.addWidget(separator)
+                # Add widgets to horizontal layout
+                one_line_field_layout.addWidget(label)
+                one_line_field_layout.addWidget(line_edit)
+                one_line_field_layout.addWidget(label2)
+                one_line_field_layout.addWidget(line_edit2)
 
-        # Layout for the 70% of the window
-        form_layout = QVBoxLayout()
+                # Add horizontal layout to frame layout
+                frame_layout.addLayout(one_line_field_layout)
 
-        # Add top vertical spacer
-        form_layout.addStretch(1)
+            # Add frames to scroll layout
+            scroll_layout.addWidget(frame_for_each_form)
 
-        # Scroll Area for data forms
-        scrolling_menu = QScrollArea()
+        # Add scroll wdiget to scroll area
+        scroll_area.setWidget(scroll_widget)
 
-
-            # for _ in range(4):
-            #     # Add forms layout
-            #     row_layout = QHBoxLayout()
-            #     # row_layout.setObjectName("tys")
-            #
-            #     # Add space on the left
-            #     row_layout.addStretch(1)
-            #
-            #     # checkbox
-            #     checkbox = QCheckBox("Protokół zatrzymania osoby", self)
-            #     # checkbox.setObjectName("lel")
-            #     row_layout.addWidget(checkbox)
-            #
-            #     # Add space between label and spinbox
-            #     row_layout.addStretch(1)
-            #
-            #     spinbox = QSpinBox(self)
-            #     # spinbox.setObjectName("hej")
-            #     spinbox.setFixedSize(60, 30)
-            #     spinbox.setValue(1)
-            #     row_layout.addWidget(spinbox)
-            #
-            #     # Add space on the right
-            #     row_layout.addStretch(1)
-            #
-            #     form_layout.addLayout(row_layout)
-
-        # Add bottom vertical spacer
-        form_layout.addStretch(1)
-
-        # Layout for the buttons at the bottom
-        button_layout = QHBoxLayout()
-
-        # Add space on the left
-        button_layout.addStretch(1)
-
-        # Buttons size
-        buttons_size = (245, 45)
-        # "Back" button
-        powrot_button = QPushButton("Wstecz", self)
-        powrot_button.setFixedSize(*buttons_size)
-        powrot_button.setStyleSheet("background-color: blue; color: white;")
-        button_layout.addWidget(powrot_button)
-
-        # Spacer between buttons
-        button_layout.addSpacerItem(QSpacerItem(25, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum))
-
-        # "Clear" button
-        clear_button = QPushButton("Wyczyść", self)
-        clear_button.setFixedSize(*buttons_size)
-        clear_button.setStyleSheet("background-color: blue; color: white;")
-        button_layout.addWidget(clear_button)
-
-        # Spacer between buttons
-        button_layout.addSpacerItem(QSpacerItem(25, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum))
-
-        # "Next" button
-        nastepny_button = QPushButton("Dalej", self)
-        nastepny_button.setFixedSize(*buttons_size)
-        nastepny_button.setStyleSheet("background-color: blue; color: white;")
-        button_layout.addWidget(nastepny_button)
-
-        # Add space on the right
-        button_layout.addStretch(1)
-
-        form_layout.addLayout(button_layout)
-
-        main_layout.addLayout(form_layout)
-
-        self.setLayout(main_layout)
-
-    def change_slider(self):
-        value = self.slider.value()
-        self.line_edit.setText(str(f"{value / 100:.2f}"))
-        self.setWindowOpacity(float(value/100))
-
-
-# Run the application
-# app = QApplication(sys.argv)
-# window = SecondWindow()
-# window.show()
-# sys.exit(app.exec())
+        # Add scroll area to main layout
+        main_layout.addWidget(scroll_area)
